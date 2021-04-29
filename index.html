@@ -61,23 +61,40 @@
     </style>
 </head>
 <!--<script src="/socket.io/socket.io.js"></script>-->
-<script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
-    integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
-    crossorigin="anonymous"></script>
+<script src="https://cdn.socket.io/3.1.3/socket.io.js" crossorigin="anonymous"></script>
 
-
-<script>
-    //var socket = io("/socket.io");
-    const socket = io("http://localhost:3000", {
-        path: "/socket/"
-    });
-</script>
 
 <body>
     <ul id="messages"></ul>
     <form id="form" action="">
-        <input id="input" autocomplete="off" /><button>Send</button>
+        <input id="input" autocomplete="off" /><button>Send 8</button>
     </form>
 </body>
+
+<script>
+    const socket = io("/", {
+        path: "/socket/",
+        query: 'token=eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTYxOTY5NzQzNSwiaWF0IjoxNjE5Njk3NDM1fQ.7OQcTyIA5bD9bUrSqB90XgIXylwWew_kq4zInkWCPv8'
+    });
+  
+    var messages = document.getElementById('messages');
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+        socket.emit('chat message', input.value);
+        input.value = '';
+        }
+    });
+
+    socket.on('chat message', function(msg) {
+        var item = document.createElement('li');
+        item.textContent = msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+  </script>
 
 </html>
